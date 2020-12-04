@@ -10,7 +10,7 @@ on:
   watch:
     types: started
   repository_dispatch:
-    types: 惊喜财富岛
+    types: jx_cfd
 jobs:
   build:
 
