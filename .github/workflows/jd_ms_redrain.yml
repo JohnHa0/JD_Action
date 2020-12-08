@@ -6,7 +6,9 @@ name: jd_ms_redrain(红包雨)
 on:
   workflow_dispatch:
   schedule:
-    - cron: '3 16 * * *'
+    - cron: '0 1,3,5,7,9,11,12,13,15 * * *'
+#       BTC 直播红包雨
+# 每天0,9,11,13,15,17,19,20,21,23可领，每日上限未知，
   watch:
     types: started
   repository_dispatch:
