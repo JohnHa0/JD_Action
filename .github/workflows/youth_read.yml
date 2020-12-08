@@ -19,11 +19,18 @@ jobs:
       YOUTH_READ3: ${{ secrets.YOUTH_READ3 }}
       YOUTH_READ4: ${{ secrets.YOUTH_READ4 }}
     steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js 12.x
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          repository: JohnHa0/JD_Action
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version: 12.x
+          node-version: ${{ matrix.node-version }}
+      - name: Cache node_modules
+        uses: actions/cache@v2 # 使用 GitHub 官方的缓存 Action。
+        env:
+          cache-name: cache-node-modules
       - name: npm install
         run: |
           npm install
