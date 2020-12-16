@@ -66,9 +66,9 @@ function sign() {
 function taskUrl() {
   return {
     url: `https://bs.smshibin.com/index.php?s=/store/passport/login`,
-    body: {"s": "/api/sign.active/draw","token": "91fe69f92649249c147de2ed2f0e2b61","wxapp_id": 10001},
-  headers: {
-    "Accept": "*/*",
+    body: JSON.stringify({"s": "/api/sign.active/draw","token": "91fe69f92649249c147de2ed2f0e2b61","wxapp_id": 10001}),
+    headers: {
+        "Accept": "*/*",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-cn",
         "Connection": "keep-alive",
