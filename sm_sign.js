@@ -49,10 +49,12 @@ function sign() {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
-          if (safeGet(data)) {
-            data = JSON.parse(data);
-            console.log(data.resultData.message)
-          }
+        //   if (safeGet(data)) {
+        //     data = JSON.parse(data);
+        //     console.log(data.resultData.message)
+        //   }
+        data = JSON.parse(data);
+        console.log(data.resultData.message)
         }
       } catch (e) {
         $.logErr(e, resp)
@@ -66,7 +68,7 @@ function sign() {
 function taskUrl() {
   return {
     url: `https://bs.smshibin.com/index.php?s=/store/passport/login`,
-    body: JSON.stringify({"s": "/api/sign.active/draw","token": "91fe69f92649249c147de2ed2f0e2b61","wxapp_id": 10001}),
+    body: JSON.stringify({"s": "/api/sign.active/draw","token": "91fe69f92649249c147de2ed2f0e2b61","wxapp_id": 10001,}),
     headers: {
         "Accept": "*/*",
         "Accept-Encoding": "gzip, deflate, br",
