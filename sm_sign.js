@@ -41,6 +41,29 @@ function showMsg() {
 }
 
 
+// function sign() {
+//   return new Promise(resolve => {
+//     $.post(taskUrl(), (err, resp, data) => {
+//       try {
+//         if (err) {
+//           console.log(`${JSON.stringify(err)}`)
+//           console.log(`${$.name} API请求失败，请检查网路重试`)
+//         } else {
+//           if (safeGet(data)) {
+//             data = JSON.parse(data);
+//             console.log(data.resultData.message)
+//           }
+//         }
+//       } catch (e) {
+//         $.logErr(e, resp)
+//       } finally {
+//         resolve();
+//       }
+//     })
+//   })
+// }
+
+
 function sign() {
   return new Promise(resolve => {
     $.post(taskUrl(), (err, resp, data) => {
@@ -51,7 +74,7 @@ function sign() {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-            console.log(data.resultData.message)
+            console.log(data.msg)
           }
         }
       } catch (e) {
@@ -62,6 +85,7 @@ function sign() {
     })
   })
 }
+
 
 function taskUrl() {
   return {
