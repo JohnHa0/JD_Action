@@ -61,7 +61,7 @@ if ($.isNode()) {
 
 
 
-async function sign() {
+function sign() {
   return new Promise(resolve => {
     $.post(taskUrl(), (err, resp, data) => {
       try {
@@ -80,9 +80,9 @@ async function sign() {
               // subTitle = '签到结果：失败'
               // detail = '说明：请重新获取token'
               $.msg($.name, '账号Token以失效！请重新打开软件获取');
-              if($.isNode()){
-               await notify.sendNotify($.name + " 账号" + $.index, `【提示】cookie已失效,请重新登录获取`)
-              }
+              // if($.isNode()){
+              //  await notify.sendNotify($.name + " 账号" + $.index, `【提示】cookie已失效,请重新登录获取`)
+              // }
               return
             }
             // console.log(data.msg)
