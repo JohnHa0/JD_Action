@@ -7,7 +7,7 @@ name: sm_sign
 on:
   workflow_dispatch:
   schedule:
-    - cron: '18 16 * * *'
+    - cron: '0 22 * * *'
   watch:
     types: started
   repository_dispatch:
@@ -40,7 +40,7 @@ jobs:
         run: |
           node sm_sign.js
         env:
-          JD_COOKIE: ${{ secrets.JD_COOKIE }}
+          JD_COOKIE: ${{ secrets.SM_Cookie }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}

@@ -20,25 +20,45 @@ cron "10 6 * * *" script-path=https://raw.githubusercontent.com/lxk0301/jd_scrip
 金融打卡领年终奖 = type=cron,script-path=https://raw.githubusercontent.com/lxk0301/jd_scripts/master/jr_sign.js, cronexpr="10 6 * * *", timeout=200, enable=true
  */
 const $ = new Env('世贸');
-
+let cookiesArr = [], cookie = '';
+let subTitle,detail = '';
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
-// const smCookieNode = $.isNode() ? require('./smCookie.js') : '';
-//IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], cookie = '', message;
+// 查询是否有sendNotify模块并赋予isNode()
+const smCookieNode = $.isNode() ? require('./smCookie.js') : '';
+// 分割cookies
 
-let CookiesSM = "bear \n bear"
-
-sign()
-showMsg();
-
-
-function showMsg() {
-  return new Promise(resolve => {
-    $.msg($.name, '', `【京东账号${$.index}】${$.nickName}\n${message}`);
-    resolve()
+if ($.isNode()) {
+  Object.keys(smCookieNode).forEach((item) => {
+    cookiesArr.push(smCookieNode[item])
   })
+} else {
+  cookiesArr.push($.getdata('TokenSM'));
+  cookiesArr.push($.getdata('TokenSM2'))
 }
+
+
+!(async () => {
+  if (!cookiesArr[0]) {
+    $.msg($.name, '【提示】请先获取世贸签到Token');
+    return;
+  }
+  for (let i = 0; i < cookiesArr.length; i++) {
+    if (cookiesArr[i]) {
+      cookie = cookiesArr[i];
+      $.index = i + 1;
+      console.log(`\n开始【世贸账号${$.index}】}\n`);
+      await sign();
+      await showmsg();
+    if ($.isNode()){
+       await notify.sendNotify($.name + " 账号昵称:" + nickname, $.sub+`\n`+$.desc)
+         }
+    }
+  }
+})()
+    .catch((e) => $.logErr(e))
+    .finally(() => $.done())
+
+
 
 
 function sign() {
@@ -49,12 +69,24 @@ function sign() {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
-        //   if (safeGet(data)) {
-        //     data = JSON.parse(data);
-        //     console.log(data.resultData.message)
-        //   }
-        data = JSON.parse(data);
-        console.log(data.resultData.message)
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            if (data.code==1){
+              subTitle = '签到结果：成功'
+              detail = '签到奖励： ${data.data.point}积分,连续签到第${data.data.days}天'
+            } else if (data.code==0){
+              subTitle = '签到结果：成功（重复签到）'
+            } else{
+              // subTitle = '签到结果：失败'
+              // detail = '说明：请重新获取token'
+              $.msg($.name, '账号Token以失效！请重新打开软件获取');
+              if($.isNode()){
+               await notify.sendNotify($.name + " 账号" + $.index, `【提示】cookie已失效,请重新登录获取`)
+              }
+              return
+            }
+            // console.log(data.msg)
+          }
         }
       } catch (e) {
         $.logErr(e, resp)
@@ -65,12 +97,14 @@ function sign() {
   })
 }
 
+
 function taskUrl() {
   return {
-    url: `https://bs.smshibin.com/index.php?s=/store/passport/login`,
-    body: JSON.stringify({"s": "/api/sign.active/draw","token": "91fe69f92649249c147de2ed2f0e2b61","wxapp_id": 10001,}),
+    url: `https://bs.smshibin.com/index.php?wxapp_id=10001`,
+    body: JSON.stringify(cookie),
     headers: {
-        "Accept": "*/*",
+        "origin": "https://h5.smshibin.com",
+        "Accept": "application/json, text/plain, */*",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-cn",
         "Connection": "keep-alive",
@@ -79,6 +113,17 @@ function taskUrl() {
         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
   }
 }
+}
+
+function showMsg() {
+  return new Promise(resolve => {
+    if(subTitle){
+      $.sub = subTitle
+      $.desc = detail
+      $.msg($.name+"世贸账号",$.sub,$.desc)
+    }
+    resolve()
+  })
 }
 
 
