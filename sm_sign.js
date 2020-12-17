@@ -27,7 +27,6 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const smCookieNode = $.isNode() ? require('./smCookie.js') : '';
 // 分割cookies
 
-
 if ($.isNode()) {
   Object.keys(smCookieNode).forEach((item) => {
     cookiesArr.push(smCookieNode[item])
@@ -37,43 +36,28 @@ if ($.isNode()) {
   cookiesArr.push($.getdata('TokenSM2'))
 }
 
-// !(async () => {
-//   if (!cookiesArr[0]) {
-//     $.msg($.name, '【提示】请先获取世贸签到Token');
-//     return;
-//   }
-//   for (let i = 0; i < cookiesArr.length; i++) {
-//     if (cookiesArr[i]) {
-//       cookie = cookiesArr[i];
-//       $.index = i + 1;
-//       console.log(`\n开始【世贸账号${$.index}】}\n`);
-//       await sign();
-//       await showMsg();
-//     if ($.isNode()){
-//        await notify.sendNotify($.name + " 账号昵称:" + nickname, $.sub+`\n`+$.desc)
-//          }
-//     }
-//   }
-// })()
-//     .catch((e) => $.logErr(e))
-//     .finally(() => $.done())
-
-if (!cookiesArr[0]) {
-  $.msg($.name, '【提示】请先获取世贸签到Token');
-  return;
-}
-for (let i = 0; i < cookiesArr.length; i++) {
-  if (cookiesArr[i]) {
-    cookie = cookiesArr[i];
-    $.index = i + 1;
-    console.log(`\n开始【世贸账号${$.index}】}\n`);
-    sign();
-    showMsg();
-  if ($.isNode()){
-     await notify.sendNotify($.name + " 账号昵称:" + nickname, $.sub+`\n`+$.desc)
-       }
+!(async () => {
+  if (!cookiesArr[0]) {
+    $.msg($.name, '【提示】请先获取世贸签到Token');
+    return;
   }
-}
+  for (let i = 0; i < cookiesArr.length; i++) {
+    if (cookiesArr[i]) {
+      cookie = JSON.parse(cookiesArr[i]);
+      $.index = i + 1;
+      console.log(`\n开始【世贸账号${$.index}】}\n`);
+      await sign();
+      await showMsg();
+      if ($.isNode()){
+        await notify.sendNotify($.name + $.sub+`\n`+$.desc)
+      }
+    }
+  }
+})()
+    .catch((e) => $.logErr(e))
+    .finally(() => $.done())
+
+
 
 
 function sign() {
@@ -92,8 +76,8 @@ function sign() {
             } else if (data.code==0){
               subTitle = '签到结果：成功（重复签到）'
             } else{
-              // subTitle = '签到结果：失败'
-              // detail = '说明：请重新获取token'
+              subTitle = '签到结果：失败'
+              detail = '说明：请重新获取token'
               $.msg($.name, '账号Token以失效！请重新打开软件获取');
               // if($.isNode()){
               //  await notify.sendNotify($.name + " 账号" + $.index, `【提示】cookie已失效,请重新登录获取`)
@@ -118,16 +102,16 @@ function taskUrl() {
     url: `https://bs.smshibin.com/index.php?wxapp_id=10001`,
     body: JSON.stringify(cookie),
     headers: {
-        "origin": "https://h5.smshibin.com",
-        "Accept": "application/json, text/plain, */*",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": "zh-cn",
-        "Connection": "keep-alive",
-        "Content-Type": "application/json;charset=utf-8",
-        "Host": "bs.smshibin.com",
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+      "origin": "https://h5.smshibin.com",
+      "Accept": "application/json, text/plain, */*",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Accept-Language": "zh-cn",
+      "Connection": "keep-alive",
+      "Content-Type": "application/json;charset=utf-8",
+      "Host": "bs.smshibin.com",
+      "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+    }
   }
-}
 }
 
 function showMsg() {
