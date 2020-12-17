@@ -27,6 +27,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const smCookieNode = $.isNode() ? require('./smCookie.js') : '';
 // 分割cookies
 
+
 if ($.isNode()) {
   Object.keys(smCookieNode).forEach((item) => {
     cookiesArr.push(smCookieNode[item])
@@ -36,76 +37,43 @@ if ($.isNode()) {
   cookiesArr.push($.getdata('TokenSM2'))
 }
 
-// let TokenSMs = [
-  // '',//账号一ck,例:pt_key=XXX;pt_pin=XXX;
-  // '',//账号二ck,例:pt_key=XXX;pt_pin=XXX;如有更多,依次类推
-// ]
-// // // 判断github action里面是否有京东ck
-// // if (process.env.SM_COOKIE) {
-// //   if (process.env.SM_COOKIE.indexOf('&') > -1) {
-// //     console.log(`您的cookie选择的是用&隔开\n`)
-// //     TokenSMs = process.env.SM_COOKIE.split('&');
-// //   } else if (process.env.SM_COOKIE.indexOf('\n') > -1) {
-// //     console.log(`您的cookie选择的是用换行隔开\n`)
-// //     TokenSMs = process.env.SM_COOKIE.split('\n');
-// //   } else if (process.env.SM_COOKIE.indexOf('\\n') > -1) {
-// //     //环境变量兼容腾讯云和docker下\n会被转义成\\n
-// //     console.log(`您的cookie选择的是用换行隔开\\n`)
-// //     TokenSMs = process.env.SM_COOKIE.split('\\n');
-// //   } else {
-// //     TokenSMs = [process.env.SM_COOKIE];
-// //   }
-// //   TokenSMs = [...new Set(TokenSMs)]
-// //   console.log(`\n====================共有${TokenSMs.length}个世贸账号Cookie=========\n`);
-// //   console.log(`==================脚本执行- 北京时间(UTC+8)：${new Date(new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000).toLocaleString()}=====================\n`)
-// //   // console.log(`\n==================脚本执行来自 github action=====================\n`)
-// // }
-// // for (let i = 0; i < TokenSMs.length; i++) {
-// //   const index = (i + 1 === 1) ? '' : (i + 1);
-// //   exports['TokenSM' + index] = TokenSMs[i];
-// // }
+// !(async () => {
+//   if (!cookiesArr[0]) {
+//     $.msg($.name, '【提示】请先获取世贸签到Token');
+//     return;
+//   }
+//   for (let i = 0; i < cookiesArr.length; i++) {
+//     if (cookiesArr[i]) {
+//       cookie = cookiesArr[i];
+//       $.index = i + 1;
+//       console.log(`\n开始【世贸账号${$.index}】}\n`);
+//       await sign();
+//       await showMsg();
+//     if ($.isNode()){
+//        await notify.sendNotify($.name + " 账号昵称:" + nickname, $.sub+`\n`+$.desc)
+//          }
+//     }
+//   }
+// })()
+//     .catch((e) => $.logErr(e))
+//     .finally(() => $.done())
 
-
-// if ($.isNode()) {
-//   Object.keys(TokenSMs).forEach((item) => {
-//     cookiesArr.push(TokenSMs[item])
-//   })
-// } else {
-//   cookiesArr.push($.getdata('TokenSM'));
-//   cookiesArr.push($.getdata('TokenSM2'))
-// }
- 
-if ($.isNode()) {
-  Object.keys(smCookieNode).forEach((item) => {
-    cookiesArr.push(smCookieNode[item])
-  })
-} else {
-  cookiesArr.push($.getdata('TokenSM'));
-  cookiesArr.push($.getdata('TokenSM2'))
+if (!cookiesArr[0]) {
+  $.msg($.name, '【提示】请先获取世贸签到Token');
+  return;
 }
-
-!(async () => {
-  if (!cookiesArr[0]) {
-    $.msg($.name, '【提示】请先获取世贸签到Token');
-    return;
+for (let i = 0; i < cookiesArr.length; i++) {
+  if (cookiesArr[i]) {
+    cookie = cookiesArr[i];
+    $.index = i + 1;
+    console.log(`\n开始【世贸账号${$.index}】}\n`);
+    sign();
+    showMsg();
+  if ($.isNode()){
+     await notify.sendNotify($.name + " 账号昵称:" + nickname, $.sub+`\n`+$.desc)
+       }
   }
-  for (let i = 0; i < cookiesArr.length; i++) {
-    if (cookiesArr[i]) {
-      cookie = cookiesArr[i];
-      $.index = i + 1;
-      console.log(`\n开始【世贸账号${$.index}】}\n`);
-      await sign();
-      await showMsg();
-    if ($.isNode()){
-       await notify.sendNotify($.name + " 账号昵称:" + nickname, $.sub+`\n`+$.desc)
-         }
-    }
-  }
-})()
-    .catch((e) => $.logErr(e))
-    .finally(() => $.done())
-
-
+}
 
 
 function sign() {
