@@ -36,10 +36,10 @@ if ($.isNode()) {
   cookiesArr.push($.getdata('TokenSM2'))
 }
 
-let TokenSMs = [
-  '',//账号一ck,例:pt_key=XXX;pt_pin=XXX;
-  '',//账号二ck,例:pt_key=XXX;pt_pin=XXX;如有更多,依次类推
-// // ]
+// let TokenSMs = [
+  // '',//账号一ck,例:pt_key=XXX;pt_pin=XXX;
+  // '',//账号二ck,例:pt_key=XXX;pt_pin=XXX;如有更多,依次类推
+// ]
 // // // 判断github action里面是否有京东ck
 // // if (process.env.SM_COOKIE) {
 // //   if (process.env.SM_COOKIE.indexOf('&') > -1) {
