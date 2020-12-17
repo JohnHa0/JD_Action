@@ -49,12 +49,10 @@ function sign() {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
-        //   if (safeGet(data)) {
-        //     data = JSON.parse(data);
-        //     console.log(data.resultData.message)
-        //   }
-        data = JSON.parse(data);
-        console.log(data.resultData.message)
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            console.log(data.resultData.message)
+          }
         }
       } catch (e) {
         $.logErr(e, resp)
@@ -68,16 +66,16 @@ function sign() {
 function taskUrl() {
   return {
     url: `https://bs.smshibin.com/index.php?wxapp_id=10001`,
-    body: JSON.stringify({"s": "/api/sign.active/draw","token": "91fe69f92649249c147de2ed2f0e2b61","wxapp_id": 10001})
+    body: JSON.stringify({"s": "/api/sign.active/draw","token": "91fe69f92649249c147de2ed2f0e2b61","wxapp_id": 10001}),
     headers: {
+        "origin": "https://h5.smshibin.com"
         "Accept": "application/json, text/plain, */*",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-cn",
         "Connection": "keep-alive",
         "Content-Type": "application/json;charset=utf-8",
-        "Origin": "https://h5.smshibin.com",
         "Host": "bs.smshibin.com",
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
   }
 }
 }
