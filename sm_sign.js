@@ -71,8 +71,8 @@ if ($.isNode()) {
     cookiesArr.push(TokenSMs[item])
   })
 } else {
-  cookiesArr.push($.getdata('CookieJD'));
-  cookiesArr.push($.getdata('CookieJD2'))
+  cookiesArr.push($.getdata('TokenSM'));
+  cookiesArr.push($.getdata('TokenSM2'))
 }
 
 
