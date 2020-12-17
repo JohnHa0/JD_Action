@@ -23,7 +23,7 @@ if (process.env.SM_COOKIE) {
     TokenSMs = [process.env.SM_COOKIE];
   }
   TokenSMs = [...new Set(TokenSMs)]
-  console.log(`\n====================共有${TokenSMs.length}个京东账号Cookie=========\n`);
+  console.log(`\n====================共有${TokenSMs.length}个世贸账号Cookie=========\n`);
   console.log(`==================脚本执行- 北京时间(UTC+8)：${new Date(new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000).toLocaleString()}=====================\n`)
   // console.log(`\n==================脚本执行来自 github action=====================\n`)
 }
