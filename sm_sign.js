@@ -68,7 +68,7 @@ function taskUrl() {
     url: `https://bs.smshibin.com/index.php?wxapp_id=10001`,
     body: JSON.stringify({"s": "/api/sign.active/draw","token": "91fe69f92649249c147de2ed2f0e2b61","wxapp_id": 10001}),
     headers: {
-        "origin": "https://h5.smshibin.com"
+        "origin": "https://h5.smshibin.com",
         "Accept": "application/json, text/plain, */*",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-cn",
