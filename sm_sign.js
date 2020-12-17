@@ -24,17 +24,68 @@ let cookiesArr = [], cookie = '';
 let subTitle,detail = '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 // 查询是否有sendNotify模块并赋予isNode()
-const smCookieNode = $.isNode() ? require('./smCookie.js') : '';
+// const smCookieNode = $.isNode() ? require('./smCookie.js') : '';
 // 分割cookies
 
+// if ($.isNode()) {
+//   Object.keys(smCookieNode).forEach((item) => {
+//     cookiesArr.push(smCookieNode[item])
+//   })
+// } else {
+//   cookiesArr.push($.getdata('TokenSM'));
+//   cookiesArr.push($.getdata('TokenSM2'))
+// }
+
+let COOKIES_SPLIT = "\n"; // 自定义多cookie之间连接的分隔符，默认为\n换行分割，不熟悉的不要改动和配置，为了兼容本地node执行
+let smToken = [];
+
+
 if ($.isNode()) {
-  Object.keys(smCookieNode).forEach((item) => {
-    cookiesArr.push(smCookieNode[item])
-  })
-} else {
-  cookiesArr.push($.getdata('TokenSM'));
-  cookiesArr.push($.getdata('TokenSM2'))
+  if (process.env.COOKIES_SPLIT) {
+    COOKIES_SPLIT = process.env.COOKIES_SPLIT;
+  }
+  console.log(
+    `============ cookies分隔符为：${JSON.stringify(
+      COOKIES_SPLIT
+    )} =============\n`
+  );
+  if (
+    process.env.SM_COOKIE &&
+    process.env.SM_COOKIE.indexOf(COOKIES_SPLIT) > -1
+  ) {
+    smToken = process.env.SM_COOKIE.split(COOKIES_SPLIT);
+  } else {
+    smToken = process.env.SM_COOKIE.split();
+  }
+
+
 }
+
+if ($.isNode()) {
+  Object.keys(smToken).forEach((item) => {
+    if (smToken[item]) {
+      cookiesArr.push(smToken[item]);
+    }
+  });
+
+
+  console.log(
+    `============ 共${cookiesArr.length}个世贸账号  =============\n`
+  );
+  console.log(
+    `============ 脚本执行-北京时间(UTC+8)：${new Date(
+      new Date().getTime() + 8 * 60 * 60 * 1000
+    ).toLocaleString()}  =============\n`
+  );
+} else {
+  cookiesArr.push($.getdata("smtoken"));
+}
+
+if ((isGetCookie = typeof $request !== "undefined")) {
+  GetCookie();
+$.done();
+}
+
 
 
 !(async () => {
