@@ -36,56 +36,44 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 //   cookiesArr.push($.getdata('TokenSM2'))
 // }
 
-let COOKIES_SPLIT = "\n"; // 自定义多cookie之间连接的分隔符，默认为\n换行分割，不熟悉的不要改动和配置，为了兼容本地node执行
-let smToken = [];
-
-
-if ($.isNode()) {
-  if (process.env.COOKIES_SPLIT) {
-    COOKIES_SPLIT = process.env.COOKIES_SPLIT;
-  }
-  console.log(
-    `============ cookies分隔符为：${JSON.stringify(
-      COOKIES_SPLIT
-    )} =============\n`
-  );
-  if (
-    process.env.SM_COOKIE &&
-    process.env.SM_COOKIE.indexOf(COOKIES_SPLIT) > -1
-  ) {
-    smToken = process.env.SM_COOKIE.split(COOKIES_SPLIT);
+let TokenSMs = [
+  '',//账号一ck,例:pt_key=XXX;pt_pin=XXX;
+  '',//账号二ck,例:pt_key=XXX;pt_pin=XXX;如有更多,依次类推
+]
+// 判断github action里面是否有京东ck
+if (process.env.SM_COOKIE) {
+  if (process.env.SM_COOKIE.indexOf('&') > -1) {
+    console.log(`您的cookie选择的是用&隔开\n`)
+    TokenSMs = process.env.SM_COOKIE.split('&');
+  } else if (process.env.SM_COOKIE.indexOf('\n') > -1) {
+    console.log(`您的cookie选择的是用换行隔开\n`)
+    TokenSMs = process.env.SM_COOKIE.split('\n');
+  } else if (process.env.SM_COOKIE.indexOf('\\n') > -1) {
+    //环境变量兼容腾讯云和docker下\n会被转义成\\n
+    console.log(`您的cookie选择的是用换行隔开\\n`)
+    TokenSMs = process.env.SM_COOKIE.split('\\n');
   } else {
-    smToken = process.env.SM_COOKIE;
+    TokenSMs = [process.env.SM_COOKIE];
   }
-
-
+  TokenSMs = [...new Set(TokenSMs)]
+  console.log(`\n====================共有${TokenSMs.length}个京东账号Cookie=========\n`);
+  console.log(`==================脚本执行- 北京时间(UTC+8)：${new Date(new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000).toLocaleString()}=====================\n`)
+  // console.log(`\n==================脚本执行来自 github action=====================\n`)
 }
+for (let i = 0; i < TokenSMs.length; i++) {
+  const index = (i + 1 === 1) ? '' : (i + 1);
+  exports['TokenSM' + index] = TokenSMs[i];
+}
+
 
 if ($.isNode()) {
-  Object.keys(smToken).forEach((item) => {
-    if (smToken[item]) {
-      cookiesArr.push(smToken[item]);
-    }
-  });
-
-
-  console.log(
-    `============ 共${cookiesArr.length}个世贸账号  =============\n`
-  );
-  console.log(
-    `============ 脚本执行-北京时间(UTC+8)：${new Date(
-      new Date().getTime() + 8 * 60 * 60 * 1000
-    ).toLocaleString()}  =============\n`
-  );
+  Object.keys(TokenSMs).forEach((item) => {
+    cookiesArr.push(TokenSMs[item])
+  })
 } else {
-  cookiesArr.push($.getdata("smtoken"));
+  cookiesArr.push($.getdata('CookieJD'));
+  cookiesArr.push($.getdata('CookieJD2'))
 }
-
-if ((isGetCookie = typeof $request !== "undefined")) {
-  GetCookie();
-$.done();
-}
-
 
 
 !(async () => {
