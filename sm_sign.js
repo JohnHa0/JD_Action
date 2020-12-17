@@ -78,6 +78,7 @@ function taskUrl() {
         "Host": "bs.smshibin.com",
         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
   }
+  JSON.stringify({"s": "/api/sign.active/draw","token": "91fe69f92649249c147de2ed2f0e2b61","wxapp_id": 10001,}),
 }
 }
 
