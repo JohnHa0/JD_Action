@@ -55,7 +55,7 @@ if ($.isNode()) {
   ) {
     smToken = process.env.SM_COOKIE.split(COOKIES_SPLIT);
   } else {
-    smToken = process.env.SM_COOKIE.split();
+    smToken = process.env.SM_COOKIE.split('}');
   }
 
 
