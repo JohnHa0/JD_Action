@@ -27,6 +27,11 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const smCookieNode = $.isNode() ? require('./smCookie.js') : '';
 // 分割cookies
 
+if ((isGetCookie = typeof $request !== "undefined")) {
+  GetCookie();
+$.done();
+}
+
 if ($.isNode()) {
   Object.keys(smCookieNode).forEach((item) => {
     cookiesArr.push(smCookieNode[item])
@@ -56,6 +61,18 @@ if ($.isNode()) {
 })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
+
+
+function GetCookie() {
+  if ($request &&$request.body.indexOf("}"))>=0{
+    const cookiesArrVal = $request.body;
+    if (cookiesArrVal) $.setdata(cookiesArrVal, "TokenSM");
+    $.log(
+      `[${jsname}] 获取更新body: 成功,Token: ${cookiesArrVal}`
+    );
+    $.msg(jsname, `获取更新body: 成功🎉`, ``);
+}
+
 
 
 
